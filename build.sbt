@@ -1,7 +1,7 @@
 import sbt.addCompilerPlugin
 
 ThisBuild / organization := "mikkom"
-ThisBuild / scalaVersion := "2.13.3"
+ThisBuild / scalaVersion := "2.13.4"
 ThisBuild / autoCompilerPlugins := true
 //Require JDK 11
 ThisBuild / javacOptions ++= Seq("-source", "11")
@@ -48,13 +48,13 @@ lazy val defaultSettings = Seq(
     "-Ywarn-value-discard" // Warn when non-Unit expression results are unused.
   ),
   addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full)
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.1" cross CrossVersion.full)
 )
 
 lazy val root = (project in file("."))
   .settings(defaultSettings: _*)
   .settings(
-    name := "cats-effect-3-playgroung",
+    name := "advent-of-code-2020",
     version := "0.1",
     libraryDependencies += "org.typelevel" %% "cats-effect" % "3.0.0-M3"
   )
