@@ -56,7 +56,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "advent-of-code-2020",
     version := "0.1",
-    libraryDependencies += "org.typelevel" %% "cats-effect" % "3.0.0-M3",
+    libraryDependencies += "org.typelevel" %% "cats-effect" % "3.0.0-M4",
     libraryDependencies += "org.typelevel" %% "cats-parse" % "0.1.0"
   )
 
