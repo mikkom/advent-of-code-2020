@@ -2,49 +2,35 @@ package mikkom
 
 import cats.effect.{IO, IOApp}
 import scala.io.Source
-import scala.annotation.tailrec
 
 object Day1 extends IOApp.Simple {
   val wantedSum = 2020
 
-  def answer1(expenses: List[Int]) = {
-    @tailrec
-    def loop(lst: List[Int], acc: Set[Int]): Int =
-      lst match {
-        case Nil =>
-          ??? // No solution found
-        case x :: xs =>
-          if (acc.contains(wantedSum - x))
-            x * (wantedSum - x)
-          else
-            loop(xs, acc + x)
+  def answer1(expenses: List[Int]) =
+    expenses
+      .foldLeft((List.empty[Int], Set.empty[Int])) { case ((acc, seen), x) =>
+        if (seen.contains(wantedSum - x))
+          ((x * (wantedSum - x)) :: acc, seen + x)
+        else
+          (acc, seen + x)
       }
-    loop(expenses, Set.empty[Int])
-  }
+      ._1
+      .headOption
 
-  def answer2(expenses: List[Int]): Int = {
-    @tailrec
-    def loop(
-        lst: List[Int],
-        valuesSeen: List[Int],
-        remainingNum: Map[Int, Int]
-    ): Int =
-      lst match {
-        case Nil =>
-          ??? // No solution found
-        case x :: xs =>
-          remainingNum.get(wantedSum - x) match {
+  def answer2(expenses: List[Int]) =
+    expenses
+      .foldLeft((List.empty[Int], List.empty[Int], Map.empty[Int, Int])) {
+        case ((acc, seen, pairMap), x) =>
+          val updatedMap = pairMap ++ seen.map(y => (x + y) -> (x * y))
+          pairMap.get(wantedSum - x) match {
             case Some(productOfTwo) =>
-              x * productOfTwo
+              ((x * productOfTwo) :: acc, x :: seen, updatedMap)
             case None =>
-              val updatedMap =
-                remainingNum ++ valuesSeen.map(y => (x + y) -> (x * y))
-              loop(xs, x :: valuesSeen, updatedMap)
-
+              (acc, x :: seen, updatedMap)
           }
       }
-    loop(expenses, List.empty, Map.empty)
-  }
+      ._1
+      .headOption
 
   override def run: IO[Unit] =
     for {
