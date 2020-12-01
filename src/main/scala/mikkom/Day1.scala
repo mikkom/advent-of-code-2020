@@ -1,36 +1,56 @@
 package mikkom
 
 import cats.effect.{IO, IOApp}
-import cats.syntax.all._
 import scala.io.Source
-import cats.parse.{Parser => P, Parser1, Numbers}
+import scala.annotation.tailrec
 
 object Day1 extends IOApp.Simple {
+  val wantedSum = 2020
 
-  val parseFoo: Parser1[Int] = {
-    Numbers.nonNegativeIntString.map(_.toInt)
+  def answer1(expenses: List[Int]) = {
+    @tailrec
+    def loop(lst: List[Int], acc: Set[Int]): Int =
+      lst match {
+        case Nil =>
+          ??? // No solution found
+        case x :: xs =>
+          if (acc.contains(wantedSum - x))
+            x * (wantedSum - x)
+          else
+            loop(xs, acc + x)
+      }
+    loop(expenses, Set.empty[Int])
   }
 
-  def getThere(str: String) = {
-    parseFoo.parseAll(str)
+  def answer2(expenses: List[Int]): Int = {
+    @tailrec
+    def loop(
+        lst: List[Int],
+        valuesSeen: List[Int],
+        remainingNum: Map[Int, Int]
+    ): Int =
+      lst match {
+        case Nil =>
+          ??? // No solution found
+        case x :: xs =>
+          remainingNum.get(wantedSum - x) match {
+            case Some(productOfTwo) =>
+              x * productOfTwo
+            case None =>
+              val updatedMap =
+                remainingNum ++ valuesSeen.map(y => (x + y) -> (x * y))
+              loop(xs, x :: valuesSeen, updatedMap)
+
+          }
+      }
+    loop(expenses, List.empty, Map.empty)
   }
-
-  def fuelNeeded(mass: Int) = mass / 3 - 2
-
-  def fuelNeeded2(mass: Int) =
-    List
-      .unfold(mass)(m => fuelNeeded(m).some.filter(_ > 0).map(x => (x, x)))
-      .combineAll
-
-  def answer1(masses: List[Int]) = masses.map(fuelNeeded).combineAll
-
-  def answer2(masses: List[Int]): Int = masses.map(fuelNeeded2).combineAll
 
   override def run: IO[Unit] =
     for {
       input <- IO(Source.fromResource("input-day1.txt").getLines().toList)
-      masses = input.map(_.toInt)
-      _ <- IO(println(answer1(masses)))
-      _ <- IO(println(answer2(masses)))
+      expenses = input.map(_.toInt)
+      _ <- IO(println(answer1(expenses)))
+      _ <- IO(println(answer2(expenses)))
     } yield ()
 }
