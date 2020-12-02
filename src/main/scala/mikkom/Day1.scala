@@ -6,31 +6,16 @@ import scala.io.Source
 object Day1 extends IOApp.Simple {
   val wantedSum = 2020
 
-  def answer1(expenses: List[Int]) =
+  def findProductWithSum(expenses: List[Int], elemCount: Int) =
     expenses
-      .foldLeft((List.empty[Int], Set.empty[Int])) { case ((acc, seen), x) =>
-        if (seen.contains(wantedSum - x))
-          ((x * (wantedSum - x)) :: acc, seen + x)
-        else
-          (acc, seen + x)
-      }
-      ._1
-      .headOption
+      .combinations(elemCount)
+      .filter(_.sum == wantedSum)
+      .map(_.product)
+      .nextOption()
 
-  def answer2(expenses: List[Int]) =
-    expenses
-      .foldLeft((List.empty[Int], List.empty[Int], Map.empty[Int, Int])) {
-        case ((acc, seen, pairMap), x) =>
-          val updatedMap = pairMap ++ seen.map(y => (x + y) -> (x * y))
-          pairMap.get(wantedSum - x) match {
-            case Some(productOfTwo) =>
-              ((x * productOfTwo) :: acc, x :: seen, updatedMap)
-            case None =>
-              (acc, x :: seen, updatedMap)
-          }
-      }
-      ._1
-      .headOption
+  def answer1(expenses: List[Int]) = findProductWithSum(expenses, 2)
+
+  def answer2(expenses: List[Int]) = findProductWithSum(expenses, 3)
 
   override def run: IO[Unit] =
     for {
