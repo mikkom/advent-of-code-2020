@@ -4,6 +4,10 @@ import cats.parse.{Parser => P, Numbers}
 
 object ParseUtils {
 
+  val noWhitespaceStr = P.charsWhile1(ch => !List(' ', '\n').contains(ch))
+
+  val hexChar = P.charWhere(ch => "[0-9a-f]".r.matches(ch.toString()))
+
   val int = Numbers
     .signedIntString
     .flatMap(s =>
