@@ -1,4 +1,4 @@
-package mikkom.day5
+package aoc.day5
 
 import scala.io.Source
 import cats.effect.{IO, IOApp}
