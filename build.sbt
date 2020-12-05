@@ -20,8 +20,8 @@ lazy val root = project
     name := "advent-of-code-2020",
     version := "0.1",
     organization := "mikkom",
-    scalaVersion := "3.0.0-M1",
-    libraryDependencies += "org.typelevel" %% "cats-effect" % "3.0.0-M3"
+    scalaVersion := "3.0.0-M2",
+    libraryDependencies += "org.typelevel" %% "cats-effect" % "3.0.0-M4"
   )
 
 // Format *all* Scala and SBT files
