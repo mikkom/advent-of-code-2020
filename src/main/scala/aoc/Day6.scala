@@ -10,7 +10,7 @@ object Day6 extends IOApp.Simple {
     val (total, _) =
       input.foldLeft((0, Set.empty[Char])) { case ((total, groupSet), form) =>
         if (form.isEmpty())
-          (total + groupSet.size, Set.empty[Char])
+          (total + groupSet.size, Set.empty)
         else
           (total, groupSet ++ form)
       }
