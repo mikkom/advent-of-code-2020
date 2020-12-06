@@ -1,4 +1,4 @@
-package mikkom
+package aoc
 
 import cats.parse.{Parser => P, Numbers}
 

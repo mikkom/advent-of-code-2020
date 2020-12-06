@@ -1,4 +1,4 @@
-package mikkom
+package aoc
 
 import cats.effect.{IO, IOApp}
 import scala.io.Source
