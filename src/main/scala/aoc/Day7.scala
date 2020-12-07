@@ -8,7 +8,9 @@ import ParseUtils._
 
 object Day7 extends IOApp.Simple {
 
-  case class BagRule(color: String, canContain: List[(Int, String)])
+  type Color = String
+
+  case class BagRule(color: Color, mustContain: List[(Int, Color)])
 
   val parseBagRule = {
     val color =
@@ -16,7 +18,7 @@ object Day7 extends IOApp.Simple {
         a + " " + b
       }
     val start  = color <* P.string1(" bags contain ")
-    val noBags = P.string1("no other bags").as(List.empty[(Int, String)])
+    val noBags = P.string1("no other bags").as(List.empty[(Int, Color)])
     val containedBag =
       (int <* P.char(' ')) ~ color <* P.string1(" bag") <* P.char('s').?
 
@@ -26,34 +28,34 @@ object Day7 extends IOApp.Simple {
     bagRule.map(BagRule.tupled)
   }
 
-  def countContainers(color: String)(rules: List[BagRule]): Int = {
-    val containedIn = rules.foldMap { case BagRule(color, canContain) =>
-      canContain
+  def countContainers(color: Color)(rules: List[BagRule]): Int = {
+    val containedIn = rules.foldMap { case BagRule(color, mustContain) =>
+      mustContain
         .map { case (_, containedColor) =>
           containedColor -> Set(color)
         }
         .toMap
     }
 
-    def loop(color: String): Set[String] =
+    def loop(color: Color): Set[Color] =
       containedIn
         .getOrElse(color, List.empty)
-        .foldLeft(Set.empty[String]) { case (acc, containerColor) =>
+        .foldLeft(Set.empty[Color]) { case (acc, containerColor) =>
           (acc + containerColor) ++ loop(containerColor)
         }
 
     loop(color).size
   }
 
-  def countRequiredBags(color: String)(rules: List[BagRule]): Int = {
+  def countRequiredBags(color: Color)(rules: List[BagRule]): Int = {
     val containedBags =
       rules
         .map { rule =>
-          rule.color -> rule.canContain
+          rule.color -> rule.mustContain
         }
         .toMap
 
-    def loop(color: String): Int =
+    def loop(color: Color): Int =
       containedBags
         .getOrElse(color, List.empty)
         .foldLeft(0) { case (total, (count, color)) =>
