@@ -28,10 +28,13 @@ object Day8 extends IOApp.Simple {
   case class Nop(arg: Int)       extends Op
 
   val parseOp: Parser1[Op] = {
-    def parse(op: String) = P.string1(op) ~ P.char(' ') *> intPlus
+    def parse(id: String) = P.string1(id) ~ P.char(' ') *> intPlus
 
+    val ops = List("nop" -> Nop, "acc" -> Acc, "jmp" -> Jmp)
     P.oneOf1(
-      List(parse("nop").map(Nop), parse("acc").map(Acc), parse("jmp").map(Jmp))
+      ops.map { case (id, op) =>
+        parse(id).map(op)
+      }
     )
   }
 
