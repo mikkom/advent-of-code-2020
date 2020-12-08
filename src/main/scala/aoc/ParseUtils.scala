@@ -1,6 +1,7 @@
 package aoc
 
 import cats.parse.{Parser => P, Numbers}
+import cats.syntax.all._
 
 object ParseUtils {
 
@@ -16,6 +17,8 @@ object ParseUtils {
           P.pure(_)
         )
     )
+
+  val intPlus = P.char('+').? *> int
 
   val intList = P.repSep(int, 0, P.char(','))
 
