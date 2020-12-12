@@ -6,6 +6,8 @@ ThisBuild / autoCompilerPlugins := true
 //Require JDK 11
 ThisBuild / javacOptions ++= Seq("-source", "11")
 
+Global / cancelable := true
+
 lazy val defaultSettings = Seq(
   scalacOptions ++=
     Seq(
@@ -59,7 +61,11 @@ lazy val root = (project in file("."))
   .settings(
     name := "advent-of-code-2020",
     version := "0.1",
-    trapExit := false,
+    fork := true,         // run program in forked JVM - so exiting it won't kill sbt
+    trapExit := false,    // sbt don't prevent process from exiting
+    connectInput := true, // forked process still reads from std-in
+    outputStrategy :=
+      Some(StdoutOutput), // prevent output from prepending [info]
     libraryDependencies += "org.typelevel" %% "cats-effect" % "3.0.0-M4",
     libraryDependencies += "org.typelevel" %% "cats-parse"  % "0.1.0"
   )
