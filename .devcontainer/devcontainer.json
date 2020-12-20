@@ -1,0 +1,5 @@
+{
+  "remoteEnv": {
+    "SBT_OPTS": "-XX:MaxMetaspaceSize=512m -XX:ReservedCodeCacheSize=256m -Xms2g -Xmx8g"
+  }
+}
